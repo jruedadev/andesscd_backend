@@ -1,9 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\DriverController;
-use App\Http\Controllers\OwnerController;
-use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\PostsController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,12 +23,10 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
 });
 
+Route::resource('blog', PostsController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
-        return $request->user();
+        return User::with('posts')->findOrFail($request->user()->id);
     });
-
-    Route::resource('vehicles', VehicleController::class);
-    Route::resource('owners', OwnerController::class);
-    Route::resource('drivers', DriverController::class);
 });
