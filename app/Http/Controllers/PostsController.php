@@ -104,6 +104,6 @@ class PostsController extends BaseController
     public function destroy(Post $blog)
     {
         $blog->delete();
-        $this->sendResponse([], "Post deleted Successfully");
+        $this->sendResponse(['deleted' => true], "Post deleted Successfully");
     }
 }
