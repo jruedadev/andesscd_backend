@@ -23,7 +23,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
 });
 
-Route::get('api/users', function () {
+Route::get('users', function () {
     return response()->json(User::all(), 200);
 });
 
