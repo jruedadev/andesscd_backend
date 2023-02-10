@@ -23,6 +23,10 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
 });
 
+Route::get('api/users', function () {
+    return response()->json(User::all(), 200);
+});
+
 Route::resource('blog', PostsController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
 
 Route::middleware('auth:sanctum')->group(function () {
