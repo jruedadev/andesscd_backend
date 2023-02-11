@@ -59,8 +59,9 @@ class PostsController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $blog)
+    public function show($blog)
     {
+        $blog = Post::with('author')->findOrFail($blog);
         return $this->sendResponse($blog, "Success");
     }
 
