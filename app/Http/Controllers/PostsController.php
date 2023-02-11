@@ -43,6 +43,8 @@ class PostsController extends BaseController
         if (!$custom_validation) {
             return $this->sendError("The Banner field must be a Base64 Encoded Image or external URL.");
         }
+        if (base64_decode($request->banner, true)) {
+        }
 
         $blog = new Post();
         $blog->fill($request->all());
@@ -80,14 +82,19 @@ class PostsController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePostRequest $request, Post $blog)
+    public function update(Post $blog, Request $request)
     {
+        dd($request->all());
         if (isset($request->banner)) {
             $custom_validation = (base64_decode($request->banner, true) || preg_match("/^(((https|http)?:\/\/)|(www\.))([a-z0-9-].?)+(:[0-9]+)?(\/.*)?$/", $request->banner) >= 1);
             if (!$custom_validation) {
                 return $this->sendError("The Banner field must be a Base64 Encoded Image or external URL.");
             }
+            if (base64_decode($request->banner, true)) {
+                dd($request->banner);
+            }
         }
+
 
         $blog->fill($request->all());
         $blog->save();
