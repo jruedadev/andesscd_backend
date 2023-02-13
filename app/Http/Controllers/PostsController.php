@@ -98,15 +98,12 @@ class PostsController extends BaseController
             if (!$custom_validation) {
                 return $this->sendError("The Banner field must be a Base64 Encoded Image or external URL.", ['banner' => "The Banner field must be a Base64 Encoded Image or external URL."], 200);
             }
-            if ($base64_file) {
-                dd($request->banner);
-            }
         }
 
         $blog->fill($request->all());
 
         if ($base64_file) {
-            $name = 'jruedadev_andesscd/post_' . $blog->id;
+            $name = 'jruedadev_andesscd/post_' . $blog->id . '.jpg';
             Storage::disk('s3')->put($name, $base64_file);
             $blog->banner = Storage::disk('s3')->url($name);
         }
