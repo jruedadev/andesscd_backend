@@ -105,7 +105,7 @@ class PostsController extends BaseController
         if ($base64_file) {
             $name = 'jruedadev_andesscd/post_' . $blog->id . '.jpg';
             Storage::disk('s3')->put($name, $base64_file);
-            $blog->banner = Storage::disk('s3')->url($name);
+            $blog->fill(['banner' => Storage::disk('s3')->url($name)]);
         }
 
         $blog->save();
