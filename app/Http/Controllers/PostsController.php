@@ -108,8 +108,8 @@ class PostsController extends BaseController
             Storage::disk('s3')->put($name, $base64_file);
             $blog->fill(['banner' => Storage::disk('s3')->url($name)]);
         }
-
         $blog->save();
+        $blog->load('author');
 
         return $this->sendResponse($blog, "Success");
     }
