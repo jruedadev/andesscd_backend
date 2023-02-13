@@ -39,7 +39,7 @@ class PostsController extends BaseController
      */
     public function store(CreatePostRequest $request)
     {
-        $custom_validation = (base64_decode($request->banner, true) || preg_match("/^(((https|http)?:\/\/)|(www\.))([a-z0-9-].?)+(:[0-9]+)?(\/.*)?$/", $request->banner) >= 1);
+        $custom_validation = (base64_decode(preg_replace("/data:image\/jpeg;base64,/", "", $request->banner), true) || preg_match("/^(((https|http)?:\/\/)|(www\.))([a-z0-9-].?)+(:[0-9]+)?(\/.*)?$/", $request->banner) >= 1);
         if (!$custom_validation) {
             return $this->sendError("The Banner field must be a Base64 Encoded Image or external URL.");
         }
@@ -85,13 +85,13 @@ class PostsController extends BaseController
      */
     public function update(Post $blog, Request $request)
     {
-        dd($request->all());
         if (isset($request->banner)) {
-            $custom_validation = (base64_decode($request->banner, true) || preg_match("/^(((https|http)?:\/\/)|(www\.))([a-z0-9-].?)+(:[0-9]+)?(\/.*)?$/", $request->banner) >= 1);
+            $base64_file = base64_decode(preg_replace("/data:image\/jpeg;base64,/", "", $request->banner), true);
+            $custom_validation = ($base64_file || preg_match("/^(((https|http)?:\/\/)|(www\.))([a-z0-9-].?)+(:[0-9]+)?(\/.*)?$/", $request->banner) >= 1);
             if (!$custom_validation) {
-                return $this->sendError("The Banner field must be a Base64 Encoded Image or external URL.");
+                return $this->sendError("The Banner field must be a Base64 Encoded Image or external URL.", ['banner' => "The Banner field must be a Base64 Encoded Image or external URL."], 200);
             }
-            if (base64_decode($request->banner, true)) {
+            if ($base64_file) {
                 dd($request->banner);
             }
         }
