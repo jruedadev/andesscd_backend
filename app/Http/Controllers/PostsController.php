@@ -91,6 +91,7 @@ class PostsController extends BaseController
      */
     public function update($blog, Request $request)
     {
+        $base64_file = false;
         $blog = Post::with('author')->findOrFail($blog);
         if (isset($request->banner)) {
             $base64_file = base64_decode(preg_replace("/data:image\/jpeg;base64,/", "", $request->banner), true);
